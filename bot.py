@@ -1,6 +1,6 @@
 import logging
 from io import BytesIO
-
+import random
 import requests
 from PIL import Image
 from pymongo import MongoClient
@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 updater = Updater(token=secret.TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
+chats = model.get_mongo_storage("Users_faces")
 
 def start(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -43,16 +44,20 @@ user_picture = {}
 def image(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
+    num = random.randrange(355585965444, 555585965444)
+    model.add_item(chats, chat_id, num)
+
+
+
+
     model.users_pic[user_id] = './picture/user_pic.jpg'
-    # logger.info(f"= Got on chat #{chat_id}: {text!r}")
     reply_markup = model.buttuns(update)
     update.message.reply_text('Please choose your character:', reply_markup=reply_markup)
-    # context.bot.send_message(chat_id=update.message.chat_id,  text = response )
     photos: typing.List[PhotoSize] = update.message.photo
     f = photos[0].get_file()
     file = requests.get(f['file_path'])
     im = Image.open(BytesIO(file.content))
-    im.save('./picture/user_pic.jpg')
+    im.save(f'./picture/{num}.jpg')
 
     # user = {}
     # text = update.message.text
@@ -75,7 +80,7 @@ dispatcher.add_handler(start_handler)
 echo_handler = MessageHandler(Filters.text, respond)
 dispatcher.add_handler(echo_handler)
 
-image_handler = MessageHandler(Filters.photo, igite, pass_user_data=True)
+image_handler = MessageHandler(Filters.photo, image, pass_user_data=True)
 dispatcher.add_handler(image_handler)
 
 dispatcher.add_handler(CallbackQueryHandler(model.button))

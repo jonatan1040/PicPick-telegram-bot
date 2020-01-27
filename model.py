@@ -1,8 +1,8 @@
+from pymongo.collection import Collection
 import cv2
+import pymongo
 from PIL import Image
-from telegram.ext import CommandHandler, CallbackContext, MessageHandler, \
-    Filters, Updater
-from telegram import Update
+from pymongo import MongoClient
 # מוצא איפה הפנים נמצאות בתמונה לפי פיקסלים
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -53,7 +53,33 @@ def button(update, context):
     chat_id = update.effective_chat.id
     user_id = update.effective_user.id
     query = update.callback_query
-    return_pic = paste_face(f'{users_pic[user_id]}', f'./picture/{query.data}.jpg')
+    items = list_items(chats, chat_id)
+    return_pic = paste_face(f'./picture/{items[len(items)-1]}', f'./picture/{query.data}.jpg')
     context.bot.send_photo(chat_id=chat_id, photo=open(return_pic, 'rb'))
     reply_markup = buttuns(update)
     context.bot.send_message(chat_id=chat_id, text='Choose another h=', reply_markup=reply_markup)
+
+
+def get_mongo_storage(dbname):
+    client = MongoClient()
+    db = client.get_database(dbname)
+    coll = db.get_collection("chats")
+    coll.create_index([
+        ('chat_id', pymongo.ASCENDING),
+    ], unique=True)
+    return coll
+
+
+chats = get_mongo_storage("Users_faces")
+
+
+def add_item(chats, chat_id, num):
+    # {chat_id: 7213125, items: ['milk', 'coffee', 'banana']}
+    chats.update_one({'chat_id': chat_id}, {
+        "$push": {'items': f'{num}.jpg'}
+    }, upsert=True)
+
+
+def list_items(coll: Collection, chat_id):
+    d = coll.find_one({'chat_id': chat_id})
+    return d['items']
