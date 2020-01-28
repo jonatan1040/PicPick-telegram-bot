@@ -1,17 +1,21 @@
 # 👮‍♂️👩‍🎓PickPic👷‍♂️🕵️‍♂️👨‍🎓
-<https://t.me/{BOT_ID}>
+<https://t.me/PickPic_Maneger_bot>
 
-{ONE LINE BOT DESCRIPTION HERE} 
+Paste a picture on funny image
 
-* {Participant 1 Name}
-* {Participant 2 Name}
-* {Participant 3 Name}
+* Izak Hirschman
+* Yehonatan Menachem
+* Lital Zilka
 
 {OPTIONAL: MORE PROJECT INFO HERE}
 
 ## Screenshots
 
-![SCREESHOT DECSRIPTION](screenshots/shopping-list-bot-1.png)
+![SCREESHOT DECSRIPTION](screenshots/photo5872929081186693538.jpg)
+![SCREESHOT DECSRIPTION](screenshots/photo5872929081186693539.jpg)
+![SCREESHOT DECSRIPTION](screenshots/photo5872929081186693540.jpg)
+
+
 
 ## How to Run This Bot
 ### Prerequisites
@@ -44,6 +48,8 @@ To run all test  use:
 (Or just `pytest` if running in a pipenv shell.)
 
 ## Credits and References
+https://stackoverflow.com/questions/51486297/cropping-an-image-in-a-circular-way-using-python _ stackoverflow-make image round
+https://towardsdatascience.com/face-detection-in-2-minutes-using-opencv-python-90f89d7c0f81 _ face recognition with open_cv
 * [Telegram Docs](https://core.telegram.org/bots)
 * [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
 * {ADD MORE REFERENCES TO LIBRARIES, APIS AND CODE SNIPPETS HERE}

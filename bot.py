@@ -32,13 +32,7 @@ def respond(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     text = update.message.text
     print(text)
-    # model.buttuns(update)
-    # response = text
-    # return_pic = paste_face('./picture/user_pic.jpg', f'./picture/{text}.jpg')
-    # context.bot.send_photo(chat_id=chat_id, photo=open(return_pic, 'rb'))
 
-
-user_picture = {}
 
 
 def image(update: Update, context: CallbackContext):
@@ -47,31 +41,15 @@ def image(update: Update, context: CallbackContext):
     num = random.randrange(355585965444, 555585965444)
     model.add_item(chats, chat_id, num)
 
-
-
-
-    model.users_pic[user_id] = './picture/user_pic.jpg'
     reply_markup = model.buttuns(update)
-    update.message.reply_text('Please choose your character:', reply_markup=reply_markup)
+
     photos: typing.List[PhotoSize] = update.message.photo
     f = photos[0].get_file()
     file = requests.get(f['file_path'])
     im = Image.open(BytesIO(file.content))
     im.save(f'./picture/{num}.jpg')
+    update.message.reply_text('Please choose your character:', reply_markup=reply_markup)
 
-    # user = {}
-    # text = update.message.text
-    # chat_id = update.effective_chat.id
-    # user_id = update.effective_user.id
-    # client = MongoClient()
-    # db = client.get_database("picture_by_user")
-    # results = db.get_collection("user_picture")
-    # photos: typing.List[PhotoSize] = update.message.photo
-    # f = photos[0].get_file()
-    # user['user_id'] = f'{user_id}'
-    # user['file_path'] = f['file_path']
-    # user["kind"] = f['file_path']
-    # results.insert_one(user)
 
 
 start_handler = CommandHandler('start', start)
