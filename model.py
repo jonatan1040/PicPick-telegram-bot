@@ -28,21 +28,38 @@ def paste_face(image2, chat_id):
     parts = []
     print(items)
     print(type(items))
-    for j in range(len(faces_to_paste)):
-        faces = find_face(f'./picture/{items[len(items) - 1 - j]}')
+    if len(faces_to_paste) < len(items):
+        for j in range(len(faces_to_paste)):
+                faces = find_face(f'./picture/{items[len(items) - 1 - j]}')
+                print(faces)
+                # if faces != ():
+                print('test1')
+                part = Image.open(f'./picture/{items[len(items) - 1 - j]}').crop(
+                    (faces[0][0], faces[0][1]-20, faces[0][0] + faces[0][2], faces[0][1]-20 + faces[0][2]+20))
+                part_circled = to_circle(part)
+                print(part_circled.format, part_circled.mode)
+                parts.append(part_circled)
+    else:
+        faces = find_face(f'./picture/{items[len(items) - 1 ]}')
         print(faces)
         # if faces != ():
         print('test1')
-        part = Image.open(f'./picture/{items[len(items) - 1 - j]}').crop(
-            (faces[0][0], faces[0][1]-20, faces[0][0] + faces[0][2], faces[0][1]-20 + faces[0][2]+20))
+        part = Image.open(f'./picture/{items[len(items) - 1 ]}').crop(
+            (faces[0][0], faces[0][1] - 20, faces[0][0] + faces[0][2], faces[0][1] - 20 + faces[0][2] + 20))
         part_circled = to_circle(part)
         print(part_circled.format, part_circled.mode)
         parts.append(part_circled)
 
+
     for i in range(len(faces_to_paste)):
-        face = faces_to_paste[i]
-        part1 = parts[i].resize((face[2]+10, face[3]+20))
-        img2.paste(part1, (face[0]-5, face[1]-10, face[0] + face[2]+5, face[1] + face[3]+10), mask=part1)
+        if len(parts) > 1:
+            face = faces_to_paste[i]
+            part1 = parts[i].resize((face[2]+10, face[3]+20))
+            img2.paste(part1, (face[0]-5, face[1]-10, face[0] + face[2]+5, face[1] + face[3]+10), mask=part1)
+        else:
+            face = faces_to_paste[i]
+            part1 = parts[0].resize((face[2]+10, face[3]+20))
+            img2.paste(part1, (face[0]-5, face[1]-10, face[0] + face[2]+5, face[1] + face[3]+10), mask=part1)
     img2.save('./picture/new2.png')
     return './picture/new2.png'
 
